@@ -1,4 +1,4 @@
-name: Update Flutter CMake Image
+name: Build Image
 
 on:
   workflow_call:
