@@ -64,6 +64,8 @@ jobs:
     - name: Get the latest version from the file
       id: version_fetcher
       run: echo "::set-output name=version::$(cat ./manifest/unprocessed_versions.txt | sort -Vr | head -n 1)"
+    - name: Copy Dockerfile
+      run: cp v5.Dockerfile Dockerfile
   
   request-image-build:
     needs: update_versions
