@@ -1,0 +1,51 @@
+name: Update Flutter CMake Image
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: SudhanPlayz-Discord-MusicBot
+jobs:
+  build_push_image:
+    name: Build and Push Flutter CMake Image
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup repo
+      uses: actions/checkout@v2
+
+    - name: Log version to build
+      run: "echo \"To build version: ${{ inputs.version }}\"" 
+      
+    - name: Setup Upstream Repo
+      uses: actions/checkout@v2
+      with:
+        repository: SudhanPlayz/Discord-MusicBot
+        ref: "refs/tags/v${{ inputs.version }}"
+        path: upstream
+        submodules: true
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to Github Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and Push
+      uses: docker/build-push-action@v2
+      with:
+        context: ./upstream
+        file: ./upstream/Dockerfile
+        platforms: linux/amd64
+        push: true
+        build-args: VERSION=${{ inputs.version }}
+        tags: |
+          "${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest"
+          "${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}"
