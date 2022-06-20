@@ -8,7 +8,7 @@ on:
         type: string
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: SudhanPlayz-Discord-MusicBot
+  IMAGE_NAME: sudhanplayz-discord-musicBot
 jobs:
   build_push_image:
     name: Build and Push Flutter CMake Image
