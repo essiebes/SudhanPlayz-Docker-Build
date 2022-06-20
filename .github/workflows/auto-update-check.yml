@@ -3,8 +3,6 @@ on:
   workflow_dispatch:
   schedule:
   - cron: "0 6 * * *"
-env:
-  IMAGE_NAME: SudhanPlayz-Discord-MusicBot
 jobs:
   get_versions:
     name: Get Versions
