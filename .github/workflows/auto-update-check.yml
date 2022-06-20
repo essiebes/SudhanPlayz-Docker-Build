@@ -68,3 +68,4 @@ jobs:
     uses: ./.github/workflows/build-image.yml
     with:
       version: ${{ needs.update_versions.outputs.version }}
+      ref: "refs/tags/v${{ needs.update_versions.outputs.version }}"
