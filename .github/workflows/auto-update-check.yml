@@ -46,6 +46,7 @@ jobs:
     needs: get_versions
     outputs:
       version: ${{ steps.version_fetcher.outputs.version }}
+      handle: ${{ steps.version_check.outputs.handle }}
     if: needs.get_versions.outputs.latest_version != needs.get_versions.outputs.current_version
     steps:
     - uses: actions/checkout@v2
@@ -63,12 +64,16 @@ jobs:
       id: version_fetcher
       run: echo "::set-output name=version::$(cat ./manifest/unprocessed_versions.txt | sort -Vr | head -n 1)"
     - name: Check if version is above threshold
+      id: version_check
       run: |
         sudo chmod +x ./scripts/checkver.sh
         ./scripts/checkver.sh ${{ steps.version_fetcher.outputs.version }}
+        $status=$?
+        echo "::set-output name=handle::$([ $status -eq 0 ] echo \"yes\" || echo \"no\")"
   
   request-image-build:
     needs: update_versions
+    if: ${{ needs.update_versions.outputs.version }} == "yes"
     uses: ./.github/workflows/build-image.yml
     with:
       version: ${{ needs.update_versions.outputs.version }}
