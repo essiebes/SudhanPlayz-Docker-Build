@@ -30,7 +30,7 @@ jobs:
       id: read_version
       run: |
         sudo chmod +x ./scripts/ghcrtags.sh
-        content="$(./scripts/ghcrtags.sh essiebes/sudhanPlayz-discord-musicBot | sed 's/^v//' | grep -P '^(\d{1,}\.){2}\d{1,}$' | sort)"
+        content="$(./scripts/ghcrtags.sh essiebes/sudhanplayz-discord-musicbot | sed 's/^v//' | grep -P '^(\d{1,}\.){2}\d{1,}$' | sort)"
         content="${content//'%'/'%25'}"
         content="${content//$'\n'/'%0A'}"
         content="${content//$'\r'/'%0D'}"
