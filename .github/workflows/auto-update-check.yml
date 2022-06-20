@@ -72,7 +72,7 @@ jobs:
   
   request-image-build:
     needs: update_versions
-    if: ${{ needs.update_versions.outputs.version }} == "yes"
+    if: needs.update_versions.outputs.handle == 'yes'
     uses: ./.github/workflows/build-image.yml
     with:
       version: ${{ needs.update_versions.outputs.version }}
