@@ -17,9 +17,6 @@ jobs:
     name: Build and Push Image
     runs-on: ubuntu-latest
     steps:
-    - name: Setup repo
-      uses: actions/checkout@v2
-
     - name: Log version to build
       run: "echo \"To build version: ${{ inputs.version }}\"" 
       
