@@ -4,8 +4,8 @@ on:
   schedule:
   - cron: "0 6 * * *"
 env:
-  branch: "refs/remotes/origin/v5"
-  version: v5
+  BRANCH: "refs/remotes/origin/v5"
+  VERSION: v5
 jobs:
   get_versions:
     name: Get Versions
