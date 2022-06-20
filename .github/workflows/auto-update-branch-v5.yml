@@ -4,7 +4,7 @@ on:
   schedule:
   - cron: "0 6 * * *"
 env:
-  BRANCH: "refs/v5"
+  BRANCH: "v5"
   VERSION: v5
 jobs:
   get_versions:
