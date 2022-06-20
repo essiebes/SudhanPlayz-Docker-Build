@@ -67,9 +67,8 @@ jobs:
       id: version_check
       run: |
         sudo chmod +x ./scripts/checkver.sh
-        ./scripts/checkver.sh ${{ steps.version_fetcher.outputs.version }}
-        $status=$?
-        echo "::set-output name=handle::$([ $status -eq 0 ] echo \"yes\" || echo \"no\")"
+        status="$(./scripts/checkver.sh ${{ steps.version_fetcher.outputs.version }})"
+        echo "::set-output name=handle::$status"
   
   request-image-build:
     needs: update_versions
