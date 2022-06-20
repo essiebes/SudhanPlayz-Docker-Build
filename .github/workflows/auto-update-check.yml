@@ -17,7 +17,7 @@ jobs:
     - name: Get Current Release
       id: latest_versions
       run: |
-        sudo chmod +x ./scripts/dockertags.sh
+        sudo chmod +x ./scripts/githubtags.sh
         content="$(./scripts/githubtags.sh SudhanPlayz/Discord-Musicbot | sed 's/^v//' | grep -P '^(\d{1,}\.){2}\d{1,}$' | sort)"
         content="${content//'%'/'%25'}"
         content="${content//$'\n'/'%0A'}"
@@ -31,7 +31,7 @@ jobs:
     - name: Read Version
       id: read_version
       run: |
-        sudo chmod +x ./manifest/scripts/githubtags.sh
+        sudo chmod +x ./scripts/ghcrtags.sh
         content="$(./scripts/ghcrtags.sh essiebes/SudhanPlayz-Discord-MusicBot | sed 's/^v//' | grep -P '^(\d{1,}\.){2}\d{1,}$' | sort)"
         content="${content//'%'/'%25'}"
         content="${content//$'\n'/'%0A'}"
