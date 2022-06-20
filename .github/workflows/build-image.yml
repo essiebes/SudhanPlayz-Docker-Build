@@ -31,6 +31,9 @@ jobs:
         path: upstream
         submodules: true
 
+    - name: Copy dockerfile
+      run: cp Dockerfile upstream/Dockerfile
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
