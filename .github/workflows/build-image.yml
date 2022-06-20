@@ -6,6 +6,9 @@ on:
       version:
         required: true
         type: string
+      ref:
+        required: true
+        type: string
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: sudhanplayz-discord-musicbot
@@ -24,7 +27,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: SudhanPlayz/Discord-MusicBot
-        ref: "refs/tags/v${{ inputs.version }}"
+        ref: "${{ inputs.ref }}"
         path: upstream
         submodules: true
 
