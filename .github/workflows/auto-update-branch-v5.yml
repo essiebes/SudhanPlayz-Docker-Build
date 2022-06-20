@@ -20,7 +20,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: SudhanPlayz/Discord-MusicBot
-        ref: ${{ env.branch }}
+        ref: ${{ env.BRANCH }}
         path: upstream
         submodules: true
     - name: Get Current Release
@@ -69,5 +69,5 @@ jobs:
     needs: update_versions
     uses: ./.github/workflows/build-image.yml
     with:
-      version: ${{ env.VERSION }}
-      ref: ${{ env.BRANCH }}
+      version: v5
+      ref: "refs/remotes/origin/v5"
