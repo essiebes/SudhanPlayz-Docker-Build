@@ -69,5 +69,5 @@ jobs:
     needs: update_versions
     uses: ./.github/workflows/build-image.yml
     with:
-      version: ${{ needs.update_versions.outputs.version }}
-      ref: ${{ env.branch }}
+      version: ${{ env.VERSION }}
+      ref: ${{ env.BRANCH }}
