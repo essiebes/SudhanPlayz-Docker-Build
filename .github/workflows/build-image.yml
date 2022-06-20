@@ -14,7 +14,7 @@ env:
   IMAGE_NAME: sudhanplayz-discord-musicbot
 jobs:
   build_push_image:
-    name: Build and Push Flutter CMake Image
+    name: Build and Push Image
     runs-on: ubuntu-latest
     steps:
     - name: Setup repo
