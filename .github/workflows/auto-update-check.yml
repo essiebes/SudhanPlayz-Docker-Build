@@ -1,0 +1,72 @@
+name: "Check Online Version"
+on:
+  workflow_dispatch:
+  schedule:
+  - cron: "0 6 * * *"
+env:
+  IMAGE_NAME: SudhanPlayz-Discord-MusicBot
+jobs:
+  get_versions:
+    name: Get Versions
+    runs-on: ubuntu-latest
+    outputs:
+      current_version: ${{ steps.read_version.outputs.version }}
+      latest_version: ${{ steps.latest_versions.outputs.tag }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get Current Release
+      id: latest_versions
+      run: |
+        sudo chmod +x ./scripts/dockertags.sh
+        content="$(./scripts/githubtags.sh SudhanPlayz/Discord-Musicbot | sed 's/^v//' | grep -P '^(\d{1,}\.){2}\d{1,}$' | sort)"
+        content="${content//'%'/'%25'}"
+        content="${content//$'\n'/'%0A'}"
+        content="${content//$'\r'/'%0D'}"
+        echo "::set-output name=tag::$content"
+        
+    - name: Log latest image Tag
+      run: |
+        echo "Latest Image Tag - ${{ steps.latest_versions.outputs.tag }}"
+
+    - name: Read Version
+      id: read_version
+      run: |
+        sudo chmod +x ./manifest/scripts/githubtags.sh
+        content="$(./scripts/ghcrtags.sh essiebes/SudhanPlayz-Discord-MusicBot | sed 's/^v//' | grep -P '^(\d{1,}\.){2}\d{1,}$' | sort)"
+        content="${content//'%'/'%25'}"
+        content="${content//$'\n'/'%0A'}"
+        content="${content//$'\r'/'%0D'}"
+        echo "::set-output name=version::$content"
+        
+    - name: Log current image Tag
+      run: |
+        echo "Current Image Tag - ${{ steps.read_version.outputs.version }}"
+
+  update_versions:
+    name: Update version.txt
+    runs-on: ubuntu-latest
+    needs: get_versions
+    outputs:
+      version: ${{ steps.version_fetcher.outputs.version }}
+    if: needs.get_versions.outputs.latest_version != needs.get_versions.outputs.current_version
+    steps:
+    - uses: actions/checkout@v2
+    - name: Commit version updates to repo
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        echo -e "${{ needs.get_versions.outputs.latest_version }}" > ./manifest/versions.txt
+        echo -e "${{ needs.get_versions.outputs.current_version }}" > ./manifest/supported_versions.txt
+        comm -23 ./manifest/versions.txt ./manifest/supported_versions.txt | sort -Vr > ./manifest/unprocessed_versions.txt
+        git add .
+        git commit -m "Automatically updated versions." || echo "Nothing to commit"
+        git push || echo "Nothing to push"
+    - name: Get the latest version from the file
+      id: version_fetcher
+      run: echo "::set-output name=version::$(cat ./manifest/unprocessed_versions.txt | sort -Vr | head -n 1)"
+  
+  request-image-build:
+    needs: update_versions
+    uses: ./.github/workflows/build-image.yml
+    with:
+      version: ${{ needs.update_versions.outputs.version }}
