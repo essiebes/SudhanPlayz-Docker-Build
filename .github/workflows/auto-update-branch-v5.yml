@@ -69,5 +69,5 @@ jobs:
     needs: update_versions
     uses: ./.github/workflows/build-image.yml
     with:
-      version: v5
-      ref: "refs/remotes/origin/v5"
+      version: dev-v5
+      ref: "v5"
